@@ -3,143 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fintech App</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>My Bank App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #000000;
-            --card-bg: linear-gradient(135deg, #1a1f3c 0%, #0d0e14 100%);
-            --accent-blue: #3498db;
-            --accent-purple: #9b59b6;
-            --text-main: #ffffff;
-            --text-dim: #888888;
+            --bg-color: #050505;
+            --gold: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.3);
+            --card-gradient: linear-gradient(135deg, #1a1c2c 0%, #0a0b10 100%);
+            --text-dim: #94a3b8;
         }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding: 0;
             background-color: var(--bg-color);
-            color: var(--text-main);
+            color: white;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            overflow: hidden; /* Evita lo scroll fastidioso su mobile */
+            overflow: hidden;
         }
 
-        /* Header con Saldo */
-        header {
+        /* Header */
+        .header {
             padding: 40px 20px 20px;
             text-align: center;
         }
 
-        .saldo-label { color: var(--text-dim); font-size: 14px; }
-        .saldo-amount { font-size: 42px; font-weight: bold; margin: 10px 0; }
+        .total-balance-label { color: var(--text-dim); font-size: 14px; letter-spacing: 1px; }
+        .balance-amount { font-size: 48px; font-weight: 700; margin: 10px 0; font-variant-numeric: tabular-nums; }
+        .show-balance { color: var(--text-dim); font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-        /* La Carta (stile quella in foto) */
-        .card-container {
-            padding: 0 20px;
+        /* Contenitore Carta */
+        .content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .credit-card {
-            background: var(--card-bg);
-            border: 1px solid #222;
-            border-radius: 20px;
-            padding: 25px;
+            width: 100%;
+            max-width: 350px;
             aspect-ratio: 1.58 / 1;
+            background: var(--card-gradient);
+            border-radius: 24px;
+            padding: 25px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(255,255,255,0.02);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            position: relative;
             overflow: hidden;
         }
 
-        .card-number { font-size: 20px; letter-spacing: 3px; margin-top: 40px; }
-        .card-name { text-transform: uppercase; font-size: 14px; color: var(--text-dim); }
-
-        /* Bottoni Azione */
-        .actions {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 30px;
+        /* Effetto luce sulla carta */
+        .credit-card::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            transform: rotate(30deg);
         }
 
-        .action-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            color: white;
+        .chip {
+            width: 45px;
+            height: 35px;
+            background: linear-gradient(135deg, #e2b04a, #9d7522);
+            border-radius: 6px;
+            position: relative;
         }
 
-        .icon-circle {
-            width: 60px;
-            height: 60px;
+        .card-number {
+            font-size: 22px;
+            letter-spacing: 2px;
+            font-family: 'Courier New', monospace;
+            z-index: 2;
+        }
+
+        .card-holder {
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Bottoni Rapidi */
+        .quick-actions {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .btn-circle {
+            width: 65px;
+            height: 65px;
             border-radius: 50%;
-            border: 2px solid;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 24px;
+            background: transparent;
+            transition: transform 0.2s;
         }
 
-        .blue { border-color: var(--accent-blue); color: var(--accent-blue); }
-        .purple { border-color: var(--accent-purple); color: var(--accent-purple); }
+        .btn-circle:active { transform: scale(0.9); }
 
-        /* Bottom Nav */
-        nav {
-            margin-top: auto;
-            background: #0a0a0a;
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            border-top: 1px solid #222;
-        }
-
-        .nav-item { color: var(--text-dim); text-align: center; font-size: 10px; text-decoration: none; }
-        .nav-item i { display: block; font-size: 20px; margin-bottom: 5px; }
-        .nav-item.active { color: #f1c40f; }
-
-    </style>
-</head>
-<body>
-
-    <header>
-        <div class="saldo-label">Saldo totale</div>
-        <div class="saldo-amount">€ 0.00</div>
-        <div class="saldo-label"><i class="far fa-eye"></i> Mostra saldo</div>
-    </header>
-
-    <div class="card-container">
-        <div class="credit-card">
-            <div style="text-align: right;"><i class="fas fa-layer-group fa-2xl"></i></div>
-            <div class="card-number">4536 4777 7110 1055</div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                <div class="card-name">Leonardo Soru</div>
-                <div style="font-size: 12px;">06/50</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="actions">
-        <div class="action-btn">
-            <div class="icon-circle blue"><i class="fas fa-plus"></i></div>
-            <span>Boost</span>
-        </div>
-        <div class="action-btn">
-            <div class="icon-circle purple"><i class="fas fa-minus"></i></div>
-            <span>Deduct</span>
-        </div>
-    </div>
-
-    <nav>
-        <a href="#" class="nav-item active"><i class="fas fa-home"></i>Home</a>
-        <a href="#" class="nav-item"><i class="fas fa-chart-bar"></i>Analytics</a>
-        <a href="#" class="nav-item"><i class="fas fa-bell"></i>Notifiche</a>
-        <a href="#" class="nav-item"><i class="fas fa-cog"></i>Impostazioni</a>
-    </nav>
-
-</body>
-</html>
+        .boost { border: 2px solid #3b82f6; color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); }
+        .deduct { border: 2px solid #a855f7; color: #a855f7; box-shadow: 0
